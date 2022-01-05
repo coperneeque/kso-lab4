@@ -3,9 +3,10 @@
  * KSO 2021-z                                                           *
  * lab3                                                                 *
  ************************************************************************/
-#include <stdio.h>
 #include <errno.h>
+#include <pthread.h>
 #include <semaphore.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -54,6 +55,12 @@ void putFifoBig(Fifo_big_t *f, int k)
         return;
     }
 
+    pthread_mutex_lock(&f->mutexCond);
+    // insert
+    pthread_mutex_unlock(&f->mu);
+    pthread_cond_signal(&condFuel);
+
+/* 
     if (f->size == f->capacity)
     {
         errno = ENOBUFS;
@@ -83,6 +90,7 @@ void putFifoBig(Fifo_big_t *f, int k)
     textcolour(0, WHITE, BG_BLACK);
     printf("putFifoBig(): head_idx: %u, k: %d, size: %u\n", f->head_idx, k, f->size);
         #endif
+*/
 }
 
 int popFifoBig(Fifo_big_t* f)

@@ -6,6 +6,7 @@
 #ifndef FIFO_BIG_H
 #define FIFO_BIG_H
 
+#include <pthread.h>
 #include <semaphore.h>
 
 #define FIFO_BIG_CAPACITY 100
@@ -13,9 +14,14 @@
 
 typedef struct
 {
+    pthread_mutex_t mutexCond;
+    pthread_cond_t  semFullCond;
+    pthread_cond_t  semEmptyCond;
+
     sem_t       mutex;
     sem_t       semFull;
     sem_t       semEmpty;
+    
     int         data[FIFO_BIG_CAPACITY];
     unsigned    head_idx;  // next empty index - will wrap around when buffer is full
     int         tail_idx;  // index of data to be extracted. can be -1 if buffer empty
